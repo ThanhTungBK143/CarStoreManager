@@ -4,7 +4,7 @@ include "connection.php";
 
 <html lang="en" xmlns="">
 <head>
-    <title>User Account</title>
+    <title>Store Manage</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -12,36 +12,9 @@ include "connection.php";
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container">
-    <!-- short column display for forms rows -->
-   <!--visit https://www.w3schools.com/bootstrap/bootstrap_forms.asp search for forms template and use it.-->
-    <div class="col-lg-4">
-    <h2>User data form</h2>
-    <form action="" name="form1" method="post">
-        <div class="form-group">
-            <label for="firstname">First name:</label>
-            <input type="text" class="form-control" id="firstname" placeholder="Enter first name" name="firstname">
-        </div>
-        <div class="form-group">
-            <label for="lastname">Last name:</label>
-            <input type="text" class="form-control" id="lastname" placeholder="Enter Last name" name="lastname">
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="text" class="form-control" id="email" placeholder="Enter Email" name="email">
-        </div>
-        <div class="form-group">
-            <label for="contact">Contact:</label>
-            <input type="text" class="form-control" id="contact" placeholder="Enter contact" name="contact">
-        </div>
-        <button type="submit" name="insert" class="btn btn-default">Insert</button>
-        <button type="submit" name="update" class="btn btn-default">Update</button>
-        <button type="submit" name="delete" class="btn btn-default">Delete</button>
-
-    </form>
-</div>
-</div>
-
+    <button name="Edit" class="btn btn-default">Edit</button>
+    <button name="update" class="btn btn-default">Update</button>
+    <button name="delete" class="btn btn-default">Delete</button>
 <!-- new column inserted for records -->
 <!-- Search for boostrap table template online and copy code -->
 <div class="col-lg-12">
@@ -55,7 +28,6 @@ include "connection.php";
             <th>Color</th>
             <th>Quantity</th>
             <th>Price</th>
-            <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -75,7 +47,6 @@ include "connection.php";
             echo "<td>"; echo $row["color"]; echo "</td>";
             echo "<td>"; echo $row["quantity"]; echo "</td>";
             echo "<td>"; echo $row["price"]; echo "</td>";
-            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["product_id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
 echo "<td>
         <a href='delete.php?id={$row['product_id']}'>
           <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this car?');\">Delete</button>

@@ -1,5 +1,11 @@
 <?php
 include "connection.php";
+session_start();
+if(!isset($_SESSION['username'])){
+    header('location:login.php');
+    exit();
+}
+$username = $_SESSION['username'];
 ?>
 
 <html lang="en" xmlns="">
@@ -12,12 +18,28 @@ include "connection.php";
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <button name="Edit" class="btn btn-default">Edit</button>
-    <button name="update" class="btn btn-default">Update</button>
-    <button name="delete" class="btn btn-default">Delete</button>
+<div class="container" style="position: relative; margin-top: 20px;">
+    <h1 class="text-center">Welcome, <?php echo htmlspecialchars($username); ?> 👋</h1>
+    <div class="header-buttons">
+        <a 
+        href="edit.php" 
+        class="btn btn-success"
+        style="position: absolute; top: 0; left: -350px;" 
+        onclick="return confirm('Do you want to go to the edit page?');"
+        >EDIT</a>
+        <a 
+        href="logout.php"
+        class="btn btn-danger logout-btn" 
+        style="position: absolute; top: 0; right: -350px;" 
+        onclick="return confirm('Are you sure you want to log out?');"
+        >LOGOUT</a>
+    </div>   
+</div>
+
 <!-- new column inserted for records -->
 <!-- Search for boostrap table template online and copy code -->
 <div class="col-lg-12">
+    <h3 class="text-left">Cars Available in Store</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -47,11 +69,10 @@ include "connection.php";
             echo "<td>"; echo $row["color"]; echo "</td>";
             echo "<td>"; echo $row["quantity"]; echo "</td>";
             echo "<td>"; echo $row["price"]; echo "</td>";
-echo "<td>
-        <a href='delete.php?id={$row['product_id']}'>
-          <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this car?');\">Delete</button>
-        </a>
-      </td>";
+            echo "<td> <a href='delete.php?id={$row['product_id']}'>
+                <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this car?');\">Delete</button>
+                </a>
+            </td>";
             echo "</tr>";
         }
         ?>
@@ -59,15 +80,12 @@ echo "<td>
     </table>
 </div>
 <div class="col-lg-12">
+    <h3 class="text-left">Registered Users</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
             <th>#</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>Email</th>
-            <th>Contact</th>
-            <th>Edit</th>
+            <th>Username</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -81,16 +99,12 @@ echo "<td>
         {
             echo "<tr>";
             echo "<td>"; echo $row["id"]; echo "</td>";
-            echo "<td>"; echo $row["firstname"]; echo "</td>";
-            echo "<td>"; echo $row["lastname"]; echo "</td>";
-            echo "<td>"; echo $row["email"]; echo "</td>";
-            echo "<td>"; echo $row["contact"]; echo "</td>";
-            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
-echo "<td>
-        <a href='delete.php?id={$row['id']}'>
-          <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this employee?');\">Delete</button>
-        </a>
-      </td>";
+            echo "<td>"; echo $row["username"]; echo "</td>";
+            echo "<td>
+                <a href='delete.php?id={$row['id']}'>
+                <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</button>
+                </a>
+            </td>";
             echo "</tr>";
         }
         ?>

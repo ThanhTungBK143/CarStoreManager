@@ -50,6 +50,7 @@ $username = $_SESSION['username'];
             <th>Color</th>
             <th>Quantity</th>
             <th>Price</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -69,6 +70,7 @@ $username = $_SESSION['username'];
             echo "<td>"; echo $row["color"]; echo "</td>";
             echo "<td>"; echo $row["quantity"]; echo "</td>";
             echo "<td>"; echo $row["price"]; echo "</td>";
+            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["product_id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
             echo "<td> <a href='delete.php?id={$row['product_id']}'>
                 <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this car?');\">Delete</button>
                 </a>
@@ -86,6 +88,7 @@ $username = $_SESSION['username'];
         <tr>
             <th>#</th>
             <th>Username</th>
+            <th>Edit</th>
             <th>Delete</th>
         </tr>
         </thead>
@@ -100,6 +103,7 @@ $username = $_SESSION['username'];
             echo "<tr>";
             echo "<td>"; echo $row["id"]; echo "</td>";
             echo "<td>"; echo $row["username"]; echo "</td>";
+            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
             echo "<td>
                 <a href='delete.php?id={$row['id']}'>
                 <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</button>

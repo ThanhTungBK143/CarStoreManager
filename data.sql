@@ -3,11 +3,13 @@ USE cardealer;
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    phone VARCHAR(15) NOT NULL
 );
-INSERT INTO users (username, password)
+INSERT INTO users (username, PASSWORD , email , phone)
 VALUES 
-('admin', MD5('12345'));
+('admin', MD5('12345') , 'admin@gmail.com' , '0999999999' );
 CREATE TABLE Cars (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     make VARCHAR(50) NOT NULL,

@@ -22,11 +22,11 @@ $username = $_SESSION['username'];
     <h1 class="text-center">Welcome, <?php echo htmlspecialchars($username); ?> 👋</h1>
     <div class="header-buttons">
         <a 
-        href="edit.php" 
+        href="addcar.php" 
         class="btn btn-success"
         style="position: absolute; top: 0; left: -350px;" 
-        onclick="return confirm('Do you want to go to the edit page?');"
-        >EDIT</a>
+        onclick="return confirm('Do you want to go to car adding page?');"
+        >NEW CAR</a>
         <a 
         href="logout.php"
         class="btn btn-danger logout-btn" 
@@ -88,6 +88,8 @@ $username = $_SESSION['username'];
         <tr>
             <th>#</th>
             <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
             <th>Edit</th>
             <th>Delete</th>
         </tr>
@@ -103,6 +105,8 @@ $username = $_SESSION['username'];
             echo "<tr>";
             echo "<td>"; echo $row["id"]; echo "</td>";
             echo "<td>"; echo $row["username"]; echo "</td>";
+            echo "<td>"; echo $row["email"]; echo "</td>";
+            echo "<td>"; echo $row["phone"]; echo "</td>";
             echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
             echo "<td>
                 <a href='delete.php?id={$row['id']}'>
@@ -124,30 +128,9 @@ $username = $_SESSION['username'];
 
 <!-- to automatically refresh the pages after crud activity   window.location.href=window.location.href; -->
 <?php
-if(isset($_POST["insert"]))
-{
-    mysqli_query($link,"insert into table1 values (NULL,'$_POST[firstname]' ,'$_POST[lastname]','$_POST[email]','$_POST[contact]')");
-   ?>
-    <script type="text/javascript">
-    window.location.href=window.location.href;
-    </script>
-    <?php
-
-}
-
 if(isset($_POST["delete"]))
 {
     mysqli_query($link,"delete from table1 where firstname='$_POST[firstname]'");
-    ?>
-    <script type="text/javascript">
-        window.location.href=window.location.href;
-    </script>
-    <?php
-}
-
-if(isset($_POST["update"]))
-{
-    mysqli_query($link,"update table1 set firstname='$_POST[lastname]'where firstname='$_POST[firstname]'");
     ?>
     <script type="text/javascript">
         window.location.href=window.location.href;

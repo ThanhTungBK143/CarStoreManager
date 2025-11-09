@@ -7,7 +7,6 @@ if(!isset($_SESSION['username'])){
 }
 $username = $_SESSION['username'];
 ?>
-
 <html lang="en" xmlns="">
 <head>
     <title>Store Manage</title>
@@ -25,7 +24,7 @@ $username = $_SESSION['username'];
         href="addcar.php" 
         class="btn btn-success"
         style="position: absolute; top: 0; left: -350px;" 
-        onclick="return confirm('Do you want to go to car adding page?');"
+        onclick="return confirm('Do you want to add new car?');"
         >NEW CAR</a>
         <a 
         href="logout.php"
@@ -35,7 +34,6 @@ $username = $_SESSION['username'];
         >LOGOUT</a>
     </div>   
 </div>
-
 <!-- new column inserted for records -->
 <!-- Search for boostrap table template online and copy code -->
 <div class="col-lg-12">
@@ -43,7 +41,7 @@ $username = $_SESSION['username'];
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Company</th>
             <th>Model</th>
             <th>Year</th>
@@ -70,7 +68,7 @@ $username = $_SESSION['username'];
             echo "<td>"; echo $row["color"]; echo "</td>";
             echo "<td>"; echo $row["quantity"]; echo "</td>";
             echo "<td>"; echo $row["price"]; echo "</td>";
-            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["product_id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
+            echo "<td>"; ?> <a href="editcar.php?id=<?php echo $row["product_id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
             echo "<td> <a href='deletecar.php?id={$row['product_id']}'>
                 <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this car?');\">Delete</button>
                 </a>
@@ -86,7 +84,7 @@ $username = $_SESSION['username'];
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>#</th>
+            <th>ID</th>
             <th>Username</th>
             <th>Email</th>
             <th>Phone</th>
@@ -120,22 +118,4 @@ $username = $_SESSION['username'];
     </table>
 </div>
 </body>
-
-
-<!-- new records insertion into database table -->
-<!-- records delete from database table -->
-<!-- records update from database table -->
-
-<!-- to automatically refresh the pages after crud activity   window.location.href=window.location.href; -->
-<?php
-if(isset($_POST["delete"]))
-{
-    mysqli_query($link,"delete from table1 where firstname='$_POST[firstname]'");
-    ?>
-    <script type="text/javascript">
-        window.location.href=window.location.href;
-    </script>
-    <?php
-}
-?>
 </html>

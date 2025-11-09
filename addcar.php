@@ -50,8 +50,6 @@ include "connection.php"; // kết nối DB
     </form>
 </div>
 
-
-<?php
 // INSERT
 <?php
 // INSERT HOẶC CỘNG DỒN

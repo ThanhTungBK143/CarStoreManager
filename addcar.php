@@ -50,8 +50,6 @@ include "connection.php"; // kết nối DB
     </form>
 </div>
 
-
-<?php
 // INSERT
 // INSERT HOẶC CỘNG DỒN
 if(isset($_POST["insert"])) {
@@ -91,7 +89,7 @@ if(isset($_POST["insert"])) {
     }
 
     // Tải lại trang (giống code của bạn)
-    echo "<script>window.location.href=window.location.href;</script>";
+    echo "<script>window.location.href='homepage.php';</script>";
 }
 ?>
 </body>

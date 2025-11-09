@@ -1,4 +1,3 @@
-#DEMO!!!!!!!!!!!!!! vẫn cần sửa
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,7 +32,7 @@
                        </label>
                    </div>
                    <button type="submit" class="btn btn-primary">Login</button>
-                    <button type="submit" class="btn btn-primary">Register</button> #Note: bấm là nhảy sang trang register.php (Sơn tạo register.php)
+                   <button type="submit" formaction="register.php" class="btn btn-secondary">Register</button>
                    </form>
                </div>
             </div>

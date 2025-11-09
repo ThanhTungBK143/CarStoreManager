@@ -47,45 +47,7 @@ include "connection.php"; // kết nối DB
         </div>
 
         <button type="submit" name="insert" class="btn btn-primary">Insert</button>
-        <button type="submit" name="delete" class="btn btn-danger">Delete</button>
     </form>
-</div>
-
-<div class="col-lg-12 mt-4">
-    <h2>Car Records</h2>
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>#</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Color</th>
-                <th>Quantity</th>
-                <th>Price (USD)</th>
-                <th>Action</th> <!-- Thêm cột Action -->
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-        $res = mysqli_query($link, "SELECT * FROM Cars");
-        while ($row = mysqli_fetch_array($res)) {
-            echo "<tr>";
-            echo "<td>" . $row["product_id"] . "</td>";
-            echo "<td>" . $row["make"] . "</td>";
-            echo "<td>" . $row["model"] . "</td>";
-            echo "<td>" . $row["year"] . "</td>";
-            echo "<td>" . $row["color"] . "</td>";
-            echo "<td>" . $row["quantity"] . "</td>";
-            echo "<td>" . $row["price"] . "</td>";
-            echo "<td>
-                    <a href='edit.php?id=" . $row["product_id"] . "' class='btn btn-warning btn-sm'>Edit</a>
-                  </td>";
-            echo "</tr>";
-        }
-        ?>
-        </tbody>
-    </table>
 </div>
 
 
@@ -102,44 +64,9 @@ if(isset($_POST["insert"])) {
     $quantity = (int)$_POST['quantity']; // Số lượng mới cần thêm
     $price = (float)$_POST['price'];     // Giá mới
 
-    // 2. Kiểm tra xem xe đã tồn tại chưa
-    // Xe được coi là trùng nếu CÙNG make, model, year, VÀ color
-    $check_query = "SELECT * FROM Cars 
-                    WHERE make='$make' AND model='$model' AND year='$year' AND color='$color'";
-    $res = mysqli_query($link, $check_query);
-    $num_rows = mysqli_num_rows($res);
-
-    if($num_rows > 0) {
-        // --- ĐÃ TỒN TẠI: Cập nhật (Cộng dồn số lượng) ---
-        
-        // Lấy số lượng cũ
-        $row = mysqli_fetch_array($res);
-        $old_quantity = $row["quantity"];
-        
-        // Tính số lượng mới
-        $new_quantity = $old_quantity + $quantity;
-
-        // Cập nhật lại dòng đó với số lượng mới và giá mới
-        mysqli_query($link, "UPDATE Cars SET quantity='$new_quantity', price='$price' 
-                            WHERE make='$make' AND model='$model' AND year='$year' AND color='$color'");
-
-    } else {
-        // --- CHƯA TỒN TẠI: Thêm mới như cũ ---
-        mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
-                            VALUES ('$make','$model','$year','$color','$quantity','$price')");
-    }
-
-    // Tải lại trang (giống code của bạn)
-    echo "<script>window.location.href=window.location.href;</script>";
-}
-// DELETE
-if(isset($_POST["delete"])) {
-    $make = mysqli_real_escape_string($link, $_POST['make']);
-    $model = mysqli_real_escape_string($link, $_POST['model']);
-
-    // Xóa theo make + model để tránh xóa nhầm
-    mysqli_query($link,"DELETE FROM Cars WHERE make='$make' AND model='$model'");
-    echo "<script>window.location.href=window.location.href;</script>";
+    mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
+                        VALUES ('$make','$model','$year','$color','$quantity','$price')");
+    echo "<script>window.location.href='homepage.php';</script>";
 }
 
 ?>

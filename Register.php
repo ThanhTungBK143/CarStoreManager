@@ -39,41 +39,7 @@ include "connection.php";
     </div>
 </div>
 
-<!-- new column inserted for records -->
-<div class="col-lg-12">
-    <h3>Registered Users</h3>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Edit</th>
-            <th>Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Database connection -->
-        <?php
-        if (!empty($link)) {
-            $res=mysqli_query($link,"select * from users");
-        }
-        while($row=mysqli_fetch_array($res))
-        {
-            echo "<tr>";
-            echo "<td>"; echo $row["id"]; echo "</td>";
-            echo "<td>"; echo $row["username"]; echo "</td>";
-            echo "<td>"; echo $row["email"]; echo "</td>";
-            echo "<td>"; echo $row["phone"]; echo "</td>";
-            echo "<td>"; ?> <a href="edit_user.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
-            echo "<td>"; ?> <a onclick="return confirm ('Are you sure?');" href="delete_user.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-danger">Delete </button></a> <?php echo "</td>";
-            echo "</tr>";
-        }
-        ?>
-        </tbody>
-    </table>
-</div>
+
 </body>
 
 <!-- Registration processing -->

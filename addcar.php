@@ -92,7 +92,7 @@ if(isset($_POST["insert"])) {
     }
 
     // Tải lại trang (giống code của bạn)
-    echo "<script>window.location.href=window.location.href;</script>";
+    echo "<script>window.location.href='homepage.php';</script>";
 }
 
 // DELETE (GIỮ NGUYÊN)

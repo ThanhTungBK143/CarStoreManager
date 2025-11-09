@@ -13,7 +13,7 @@ VALUES
 CREATE TABLE Cars (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     make VARCHAR(50) NOT NULL,
-    model VARCHAR(50) NOT NULL,
+    model VARCHAR(50) NOT NULL ,
     year INT NOT NULL, 
     color VARCHAR(30) NOT NULL, 
     quantity INT NOT NULL,

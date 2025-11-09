@@ -49,7 +49,7 @@ include "connection.php"; // kết nối DB
         <button type="submit" name="insert" class="btn btn-primary">Insert</button>
     </form>
 </div>
-
+<?php
 // INSERT
 // INSERT HOẶC CỘNG DỒN
 if(isset($_POST["insert"])) {

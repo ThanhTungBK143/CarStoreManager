@@ -47,45 +47,7 @@ include "connection.php"; // kết nối DB
         </div>
 
         <button type="submit" name="insert" class="btn btn-primary">Insert</button>
-        <button type="submit" name="delete" class="btn btn-danger">Delete</button>
     </form>
-</div>
-
-<div class="col-lg-12 mt-4">
-    <h2>Car Records</h2>
-    <table class="table table-bordered table-striped table-hover">
-        <thead class="thead-dark">
-            <tr>
-                <th>#</th>
-                <th>Make</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Color</th>
-                <th>Quantity</th>
-                <th>Price (USD)</th>
-                <th>Action</th> <!-- Thêm cột Action -->
-            </tr>
-        </thead>
-        <tbody>
-        <?php
-        $res = mysqli_query($link, "SELECT * FROM Cars");
-        while ($row = mysqli_fetch_array($res)) {
-            echo "<tr>";
-            echo "<td>" . $row["product_id"] . "</td>";
-            echo "<td>" . $row["make"] . "</td>";
-            echo "<td>" . $row["model"] . "</td>";
-            echo "<td>" . $row["year"] . "</td>";
-            echo "<td>" . $row["color"] . "</td>";
-            echo "<td>" . $row["quantity"] . "</td>";
-            echo "<td>" . $row["price"] . "</td>";
-            echo "<td>
-                    <a href='edit.php?id=" . $row["product_id"] . "' class='btn btn-warning btn-sm'>Edit</a>
-                  </td>";
-            echo "</tr>";
-        }
-        ?>
-        </tbody>
-    </table>
 </div>
 
 
@@ -101,17 +63,7 @@ if(isset($_POST["insert"])) {
 
     mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
                         VALUES ('$make','$model','$year','$color','$quantity','$price')");
-    echo "<script>window.location.href=window.location.href;</script>";
-}
-
-// DELETE
-if(isset($_POST["delete"])) {
-    $make = mysqli_real_escape_string($link, $_POST['make']);
-    $model = mysqli_real_escape_string($link, $_POST['model']);
-
-    // Xóa theo make + model để tránh xóa nhầm
-    mysqli_query($link,"DELETE FROM Cars WHERE make='$make' AND model='$model'");
-    echo "<script>window.location.href=window.location.href;</script>";
+    echo "<script>window.location.href=homepage.php;</script>";
 }
 
 ?>

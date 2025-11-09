@@ -1,5 +1,11 @@
 <?php
 include "connection.php";
+session_start();
+if(!isset($_SESSION['username'])){
+    header('location:login.php');
+    exit();
+}
+
 
 // Check if id exists
 if (!isset($_GET["id"])) {

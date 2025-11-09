@@ -63,7 +63,7 @@ if(isset($_POST["insert"])) {
 
     mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
                         VALUES ('$make','$model','$year','$color','$quantity','$price')");
-    echo "<script>window.location.href=homepage.php;</script>";
+    echo "<script>window.location.href='homepage.php';</script>";
 }
 
 ?>

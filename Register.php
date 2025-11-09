@@ -62,7 +62,7 @@ if(isset($_POST["register"]))
         ?>
         <script type="text/javascript">
             alert('Registration successful!');
-            window.location.href=window.location.href;
+            window.location.href='login.php';
         </script>
         <?php
     }

@@ -64,10 +64,48 @@ if(isset($_POST["insert"])) {
     $quantity = (int)$_POST['quantity']; // Số lượng mới cần thêm
     $price = (float)$_POST['price'];     // Giá mới
 
-    mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
-                        VALUES ('$make','$model','$year','$color','$quantity','$price')");
-    echo "<script>window.location.href='homepage.php';</script>";
+    // 2. Kiểm tra xem xe đã tồn tại chưa
+    // Xe được coi là trùng nếu CÙNG make, model, year, VÀ color
+    $check_query = "SELECT * FROM Cars 
+                    WHERE make='$make' AND model='$model' AND year='$year' AND color='$color'";
+    $res = mysqli_query($link, $check_query);
+    $num_rows = mysqli_num_rows($res);
+
+    if($num_rows > 0) {
+        // --- ĐÃ TỒN TẠI: Cập nhật (Cộng dồn số lượng) ---
+        
+        // Lấy số lượng cũ
+        $row = mysqli_fetch_array($res);
+        $old_quantity = $row["quantity"];
+        
+        // Tính số lượng mới
+        $new_quantity = $old_quantity + $quantity;
+
+        // Cập nhật lại dòng đó với số lượng mới và giá mới
+        mysqli_query($link, "UPDATE Cars SET quantity='$new_quantity', price='$price' 
+                            WHERE make='$make' AND model='$model' AND year='$year' AND color='$color'");
+
+    } else {
+        // --- CHƯA TỒN TẠI: Thêm mới như cũ ---
+        mysqli_query($link,"INSERT INTO Cars (make, model, year, color, quantity, price) 
+                            VALUES ('$make','$model','$year','$color','$quantity','$price')");
+    }
+
+    // Tải lại trang (giống code của bạn)
+    echo "<script>window.location.href=window.location.href;</script>";
 }
+
+// DELETE (GIỮ NGUYÊN)
+if(isset($_POST["delete"])) {
+    $make = mysqli_real_escape_string($link, $_POST['make']);
+    $model = mysqli_real_escape_string($link, $_POST['model']);
+
+    // Xóa theo make + model để tránh xóa nhầm
+    mysqli_query($link,"DELETE FROM Cars WHERE make='$make' AND model='$model'");
+    echo "<script>window.location.href=window.location.href;</script>";
+}
+
+?>
 
 ?>
 </body>

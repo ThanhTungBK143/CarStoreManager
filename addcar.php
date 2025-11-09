@@ -53,7 +53,6 @@ include "connection.php"; // kết nối DB
 
 <?php
 // INSERT
-<?php
 // INSERT HOẶC CỘNG DỒN
 if(isset($_POST["insert"])) {
     // 1. Lấy dữ liệu và làm sạch (giống code của bạn)
@@ -94,19 +93,6 @@ if(isset($_POST["insert"])) {
     // Tải lại trang (giống code của bạn)
     echo "<script>window.location.href=window.location.href;</script>";
 }
-
-// DELETE (GIỮ NGUYÊN)
-if(isset($_POST["delete"])) {
-    $make = mysqli_real_escape_string($link, $_POST['make']);
-    $model = mysqli_real_escape_string($link, $_POST['model']);
-
-    // Xóa theo make + model để tránh xóa nhầm
-    mysqli_query($link,"DELETE FROM Cars WHERE make='$make' AND model='$model'");
-    echo "<script>window.location.href=window.location.href;</script>";
-}
-
-?>
-
 ?>
 </body>
 </html>

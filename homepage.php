@@ -107,9 +107,9 @@ $username = $_SESSION['username'];
             echo "<td>"; echo $row["username"]; echo "</td>";
             echo "<td>"; echo $row["email"]; echo "</td>";
             echo "<td>"; echo $row["phone"]; echo "</td>";
-            echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
+            echo "<td>"; ?> <a href="edituser.php?id=<?php echo $row["id"]; ?>"><button type="button" class="btn btn-success">Edit </button></a> <?php echo "</td>";
             echo "<td>
-                <a href='delete.php?id={$row['id']}'>
+                <a href='deleteuser.php?id={$row['id']}'>
                 <button type='button' class='btn btn-danger' onclick=\"return confirm('Are you sure you want to delete this user?');\">Delete</button>
                 </a>
             </td>";

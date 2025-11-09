@@ -32,7 +32,7 @@
                        </label>
                    </div>
                    <button type="submit" class="btn btn-primary">Login</button>
-                   <button formaction="register.php" class="btn btn-secondary">Register</button>
+                   <a href="register.php" class="btn btn-secondary">Register</a>
                    </form>
                </div>
             </div>

@@ -50,22 +50,55 @@ if (isset($_GET['delete_user'])) {
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container" style="position: relative; margin-top: 20px;">
-    <h1 class="text-center">Welcome, <?php echo htmlspecialchars($username); ?> 👋</h1>
-    <div class="header-buttons">
+<style>
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* keeps layout clean on mobile */
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.header-bar h1 {
+    flex: 1;
+    text-align: center;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+}
+.header-bar .btn {
+    min-width: 100px;
+}
+.header-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+</style>
+
+<div class="container mt-4">
+    <div class="header-bar">
         <a 
-        href="addcar.php" 
-        class="btn btn-success"
-        style="position: absolute; top: 0; left: -350px;" 
-        onclick="return confirm('Do you want to add new car?');"
-        >NEW CAR</a>
+            href="addcar.php" 
+            class="btn btn-success"
+            onclick="return confirm('Do you want to add new car?');">
+            NEW CAR
+        </a>
+
+        <h1>Welcome, <?php echo htmlspecialchars($username); ?> 👋</h1>
+
         <a 
-        href="homepage.php?logout=true" 
-        style="position: absolute; top: 0; right: -350px;"
-        onclick="return confirm('Are you sure you want to log out?');" 
-        class="btn btn-danger">Logout</a>
-    </div>   
+            href="homepage.php?logout=true" 
+            class="btn btn-danger"
+            onclick="return confirm('Are you sure you want to log out?');">
+            LOGOUT
+        </a>
+    </div>
 </div>
+
+
 <!-- new column inserted for records -->
 <!-- Search for boostrap table template online and copy code -->
 <div class="col-lg-12">

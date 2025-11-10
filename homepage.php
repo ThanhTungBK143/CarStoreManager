@@ -55,26 +55,29 @@ if (isset($_GET['delete_user'])) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap; /* keeps layout clean on mobile */
+    flex-wrap: wrap; /* responsive on small screens */
     padding: 15px 20px;
     background-color: #f8f9fa;
-    border-radius: 8px;
+    border-bottom: 2px solid #ddd;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 .header-bar h1 {
     flex: 1;
     text-align: center;
     margin: 0;
-    font-size: 24px;
+    font-size: 30px;
     font-weight: 600;
 }
 .header-bar .btn {
     min-width: 100px;
 }
-.header-bar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+body {
+    padding-top: 100px; /* adds space so table doesn’t hide behind header */
 }
 </style>
 

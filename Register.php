@@ -47,7 +47,7 @@ include "connection.php";
 if(isset($_POST["register"]))
 {
     $username = mysqli_real_escape_string($link, $_POST["username"]);
-    $password = md5($_POST["password"]); // Using MD5 like in your data.sql
+    $password = md5($_POST["password"]); 
     $email = mysqli_real_escape_string($link, $_POST["email"]);
     $phone = mysqli_real_escape_string($link, $_POST["phone"]);
     

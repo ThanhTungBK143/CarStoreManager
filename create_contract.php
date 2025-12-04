@@ -139,7 +139,7 @@ if (isset($_POST['save_contract'])) {
                                 $cars = mysqli_query($link, "SELECT * FROM cars WHERE quantity > 0");
                                 while($c = mysqli_fetch_assoc($cars)){
                                     echo "<option value='{$c['product_id']}' data-price='{$c['price']}'>
-                                            {$c['make']} {$c['model']} ({$c['year']}) - Stock: {$c['quantity']}
+                                            {$c['make']} {$c['model']} ({$c['year']}) {$c['color']} - Stock: {$c['quantity']}
                                           </option>";
                                 }
                                 ?>

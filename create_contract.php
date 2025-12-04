@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 
 $sales_user_id = isset($_SESSION['user_id_from_db']) ? $_SESSION['user_id_from_db'] : 1; 
 
-// 2. GET CUSTOMER INFO FROM URL/POST
+// 2. GET CUSTOMER INFO
 if (!isset($_GET['customer_id']) && !isset($_POST['customer_id'])) {
     echo "<script>alert('Please select a customer from the list!'); window.location='customer.php';</script>";
     exit();
@@ -18,14 +18,13 @@ if (!isset($_GET['customer_id']) && !isset($_POST['customer_id'])) {
 
 $customer_id = isset($_GET['customer_id']) ? intval($_GET['customer_id']) : intval($_POST['customer_id']);
 
-// Get customer name for display
-$cust_res = mysqli_query($link, "SELECT full_name, email FROM customers WHERE customer_id = $customer_id");
+// Get customer name
+$cust_res = mysqli_query($link, "SELECT full_name FROM customers WHERE customer_id = $customer_id");
 $cust_row = mysqli_fetch_assoc($cust_res);
 $customer_name = $cust_row['full_name'];
 
 $message = '';
 $message_type = '';
-$new_transaction_id = 0; // To store the new transaction ID
 
 // 3. SAVE CONTRACT LOGIC
 if (isset($_POST['save_contract'])) {
@@ -44,7 +43,7 @@ if (isset($_POST['save_contract'])) {
         $message = "Quantity must be greater than 0.";
         $message_type = 'danger';
     } else {
-        // B. Start Transaction (Data Safety)
+        // B. Start Transaction
         mysqli_begin_transaction($link);
         try {
             $date = date('Y-m-d H:i:s');
@@ -57,9 +56,6 @@ if (isset($_POST['save_contract'])) {
                 throw new Exception("Error creating transaction: " . mysqli_error($link));
             }
             
-            // Get the ID for the Print button
-            $new_transaction_id = mysqli_insert_id($link);
-
             // B2. Deduct Stock
             $new_stock = $current_stock - $qty_to_sell;
             $update_stock = "UPDATE cars SET quantity = '$new_stock' WHERE product_id = '$product_id'";
@@ -69,7 +65,7 @@ if (isset($_POST['save_contract'])) {
             }
 
             mysqli_commit($link);
-            $message = "✅ Contract created successfully! Contract ID: #$new_transaction_id";
+            $message = "✅ Transaction completed successfully!";
             $message_type = 'success';
 
         } catch (Exception $e) {
@@ -84,7 +80,7 @@ if (isset($_POST['save_contract'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Create New Contract</title>
+    <title>Create New Sale</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -112,16 +108,11 @@ if (isset($_POST['save_contract'])) {
         <div class="col-lg-6">
             
             <?php if ($message): ?>
-                <div class="alert alert-<?php echo $message_type; ?> shadow-sm">
+                <div class="alert alert-<?php echo $message_type; ?> shadow-sm text-center">
                     <h4><?php echo $message; ?></h4>
-                    <?php if ($message_type == 'success' && $new_transaction_id > 0): ?>
+                    <?php if ($message_type == 'success'): ?>
                         <hr>
-                        <div class="d-flex justify-content-between">
-                            <a href="customer.php" class="btn btn-secondary">Go Back</a>
-                            <a href="contract.php?id=<?php echo $new_transaction_id; ?>" target="_blank" class="btn btn-warning font-weight-bold text-dark">
-                                <i class="fas fa-print"></i> PRINT CONTRACT
-                            </a>
-                        </div>
+                        <a href="customer.php" class="btn btn-secondary mt-2">Go Back to Customers</a>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
@@ -129,19 +120,19 @@ if (isset($_POST['save_contract'])) {
             <?php if ($message_type != 'success'): ?>
             <div class="card card-custom">
                 <div class="card-header card-header-custom">
-                    <i class="fas fa-file-signature mr-2"></i> CREATE SALES CONTRACT
+                    <i class="fas fa-file-invoice-dollar mr-2"></i> CREATE NEW SALE
                 </div>
                 <div class="card-body p-4">
                     <form action="" method="post">
                         <input type="hidden" name="customer_id" value="<?php echo $customer_id; ?>">
 
                         <div class="form-group">
-                            <label class="font-weight-bold">Customer (Buyer)</label>
+                            <label class="font-weight-bold">Customer</label>
                             <input type="text" class="form-control" value="<?php echo htmlspecialchars($customer_name); ?>" readonly style="background-color: #fff3cd;">
                         </div>
 
                         <div class="form-group">
-                            <label class="font-weight-bold">Select Car (Seller)</label>
+                            <label class="font-weight-bold">Select Car</label>
                             <select name="product_id" id="product_select" class="form-control" required onchange="calcTotal()">
                                 <option value="" data-price="0">-- Select available car --</option>
                                 <?php
@@ -171,7 +162,7 @@ if (isset($_POST['save_contract'])) {
                             </div>
                             <div class="col-8">
                                 <button type="submit" name="save_contract" class="btn btn-submit">
-                                    <i class="fas fa-check mr-2"></i> SAVE & GENERATE CONTRACT
+                                    <i class="fas fa-check mr-2"></i> CONFIRM SALE
                                 </button>
                             </div>
                         </div>
@@ -191,7 +182,7 @@ if (isset($_POST['save_contract'])) {
         var qty = parseInt(document.getElementById("qty").value) || 0;
         var total = price * qty;
         
-        // Format Currency (English/US Style)
+        // Format Currency
         document.getElementById("total_display").innerText = "$" + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     }
 </script>

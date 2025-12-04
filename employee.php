@@ -115,7 +115,7 @@ if (isset($_GET['sort'])) {
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr>
-                            <th class="text-center" width="50">#</th>
+                            <th class="text-center" width="50">ID</th>
                             <th>Employee Info</th>
                             <th>Contact</th>
                             <th class="text-center">Role</th>

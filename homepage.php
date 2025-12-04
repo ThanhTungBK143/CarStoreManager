@@ -217,21 +217,8 @@ if (isset($_GET['logout'])) {
             </a>
         </div>
         
-        <?php if ($role === 'sale'): ?>
-        <div class="col-xl-3 col-md-6 mb-4">
-            <a href="new_sale.php" class="dashboard-card card-employee"> <div class="card-body">
-                    <div class="icon-circle">
-                        <i class="fas fa-cart-plus"></i>
-                    </div>
-                    <h5 class="card-title">New Order</h5>
-                    <small class="text-muted mt-2">Create sales invoice</small>
-                </div>
-            </a>
-        </div>
-        <?php endif; ?>
 
         <?php if ($role === 'admin'): ?>
-        
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="employee.php" class="dashboard-card card-employee">
                 <div class="card-body">

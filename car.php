@@ -136,9 +136,11 @@ if ($role === 'admin' && isset($_GET['delete_id'])) {
         <div class="card-header">
             <h4><i class="fas fa-car"></i> Cars Available in Store</h4>
             
-            <a href="addcar.php" class="btn btn-light btn-sm text-primary font-weight-bold">
-                <i class="fas fa-plus-circle"></i> ADD NEW CAR
-            </a>
+            <?php if ($role === 'admin'): ?>
+                <a href="addcar.php" class="btn btn-light btn-sm text-primary font-weight-bold">
+                    <i class="fas fa-plus-circle"></i> ADD NEW CAR
+                </a>
+            <?php endif; ?>
         </div>
         
         <div class="card-body p-0">
@@ -153,7 +155,9 @@ if ($role === 'admin' && isset($_GET['delete_id'])) {
                             <th>Color</th>
                             <th class="text-center">Quantity</th>
                             <th class="text-right">Price</th>
-                            <th class="text-center">Actions</th>
+                            <?php if ($role === 'admin'): ?>
+                                <th class="text-center">Actions</th>
+                            <?php endif; ?>
                         </tr>
                     </thead>
                     <tbody>
@@ -195,25 +199,26 @@ if ($role === 'admin' && isset($_GET['delete_id'])) {
                                     $formatted_price = number_format($price, 2);
                                     echo "<td class='text-right'><strong>$ {$formatted_price}</strong></td>";
                                     
-                                    // Cột hành động
-                                    echo "<td class='text-center'>";
-                                    
-                                    // Nút Edit (Ai cũng thấy)
-                                    echo "<a href='editcar.php?id={$p_id}' class='btn btn-info btn-action' title='Edit'>
-                                            <i class='fas fa-pencil-alt'></i>
-                                          </a>";
-
-                                    // Nút Delete (Chỉ Admin thấy)
+                                    // [QUAN TRỌNG] Chỉ Admin mới thấy các nút Edit/Delete
                                     if ($role === 'admin') {
+                                        echo "<td class='text-center'>";
+                                        
+                                        // Nút Edit
+                                        echo "<a href='editcar.php?id={$p_id}' class='btn btn-info btn-action' title='Edit'>
+                                                <i class='fas fa-pencil-alt'></i>
+                                              </a>";
+
+                                        // Nút Delete
                                         echo "<a href='car.php?delete_id={$p_id}' 
                                                 class='btn btn-danger btn-action' 
                                                 title='Delete'
                                                 onclick=\"return confirm('Are you sure you want to delete {$make} {$model}?');\">
                                                 <i class='fas fa-trash'></i>
                                               </a>";
+                                        
+                                        echo "</td>";
                                     }
                                     
-                                    echo "</td>";
                                     echo "</tr>";
                                 }
                             } else {

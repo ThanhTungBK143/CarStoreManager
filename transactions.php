@@ -83,7 +83,7 @@ if ($role !== 'admin') {
                 <table class="table table-hover mb-0">
                     <thead>
                         <tr>
-                            <th class="text-center">#ID</th>
+                            <th class="text-center">ID</th>
                             <th>Date</th>
                             <th>Customer</th>
                             <th>Car Details</th>

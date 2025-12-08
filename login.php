@@ -5,7 +5,7 @@ session_start();
 $error_message = '';
 
 if (isset($_SESSION['username'])) {
-    header('location:homepage.php');
+    header('location:index.php');
     exit();
 }
 
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['role'] = $row['role']; 
                 $_SESSION['user_id_from_db'] = $row['id']; 
-                header('location: homepage.php');
+                header('location: index.php');
                 exit();
             } else {
                 $error_message = "Incorrect username or password.";

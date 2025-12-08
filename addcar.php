@@ -72,7 +72,7 @@ if(isset($_POST["insert"])) {
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php"><i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD</a>
+        <a class="navbar-brand" href="index.php"><i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD</a>
         <span class="navbar-text ml-auto">User: <b><?php echo $_SESSION['username']; ?></b></span>
     </div>
 </nav>

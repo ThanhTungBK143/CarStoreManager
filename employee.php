@@ -11,7 +11,7 @@ if (!isset($_SESSION['username'])) {
 // 2. CHECK ADMIN PERMISSION
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
 if ($role !== 'admin') {
-    echo "<script>alert('Access Denied!'); window.location='homepage.php';</script>";
+    echo "<script>alert('Access Denied!'); window.location='index.php';</script>";
     exit();
 }
 
@@ -78,7 +78,7 @@ if (isset($_GET['sort']) && $_GET['sort'] == 'asc') {
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php"><i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD</a>
+        <a class="navbar-brand" href="index.php"><i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD</a>
         <span class="navbar-text ml-auto">Admin Area: <b><?php echo $_SESSION['username']; ?></b></span>
     </div>
 </nav>

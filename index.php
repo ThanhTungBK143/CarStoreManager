@@ -153,7 +153,7 @@ if (isset($_GET['logout'])) {
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php">
+        <a class="navbar-brand" href="index.php">
             <i class="fas fa-laugh-wink"></i> CAR MANAGER
         </a>
         
@@ -165,7 +165,7 @@ if (isset($_GET['logout'])) {
                 </span>
             </li>
             <li class="nav-item ml-3">
-                <a class="nav-link text-danger" href="homepage.php?logout=true" onclick="return confirm('Ready to Leave?');">
+                <a class="nav-link text-danger" href="index.php?logout=true" onclick="return confirm('Ready to Leave?');">
                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i> Logout
                 </a>
             </li>

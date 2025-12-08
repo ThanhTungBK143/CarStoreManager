@@ -122,7 +122,7 @@ $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'sale';
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php">
+        <a class="navbar-brand" href="index.php">
             <i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD
         </a>
         <span class="navbar-text ml-auto">

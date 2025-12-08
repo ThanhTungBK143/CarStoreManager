@@ -12,7 +12,7 @@ if (!isset($_SESSION['username'])) {
 // Chỉ Admin mới được xem doanh thu/giao dịch
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
 if ($role !== 'admin') {
-    echo "<script>alert('Truy cập bị từ chối! Chỉ Admin mới được xem lịch sử giao dịch.'); window.location='homepage.php';</script>";
+    echo "<script>alert('Truy cập bị từ chối! Chỉ Admin mới được xem lịch sử giao dịch.'); window.location='index.php';</script>";
     exit();
 }
 
@@ -59,7 +59,7 @@ if ($role !== 'admin') {
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php">
+        <a class="navbar-brand" href="index.php">
             <i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD
         </a>
         <span class="navbar-text ml-auto">

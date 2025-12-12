@@ -1,11 +1,6 @@
 <?php
 include "connection.php";
-session_start();
-
-if (!isset($_SESSION['username'])) {
-    header('location:login.php');
-    exit();
-}
+include "auth_check.php";
 
 // 1. CHECK PERMISSION (ONLY ADMIN CAN EDIT)
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'sale';
@@ -33,16 +28,66 @@ if (isset($_POST["update"])) {
     $quantity = intval($_POST["quantity"]);
     $price    = floatval($_POST["price"]);
 
-    $update_query = "UPDATE cars SET make='$make', model='$model', year='$year', color='$color', quantity='$quantity', price='$price' WHERE product_id = $product_id";
+    // --- IMAGE HANDLING ---
+    $image_filename = $_POST['current_image']; 
 
-    if (mysqli_query($link, $update_query)) {
-        $message = "Car details updated successfully!";
-        $message_type = "success";
-    } else {
-        $message = "Update failed: " . mysqli_error($link);
-        $message_type = "danger";
+    if (isset($_FILES['car_image']) && $_FILES['car_image']['error'] == 0) {
+        $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+        $filename = basename($_FILES["car_image"]["name"]); 
+        $filesize = $_FILES["car_image"]["size"];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        if(!array_key_exists(strtolower($ext), $allowed)) {
+            $message = "Error: JPG or PNG files only.";
+            $message_type = "danger";
+        } elseif($filesize > 5 * 1024 * 1024) {
+            $message = "Error: File size too large (>5MB).";
+            $message_type = "danger";
+        } else {
+            // Check for duplicate filename
+            $target_path = "uploads/" . $filename;
+
+            if (file_exists($target_path)) {
+                $message = "Error: File named <b>'$filename'</b> already exists. Please rename your file.";
+                $message_type = "danger";
+            } else {
+                // Upload new file
+                if(move_uploaded_file($_FILES["car_image"]["tmp_name"], $target_path)){
+                    // Optional: Delete old image
+                    $old_file = "uploads/" . $image_filename;
+                    if(file_exists($old_file) && $image_filename != 'default.jpg' && !empty($image_filename)){
+                        unlink($old_file);
+                    }
+                    $image_filename = $filename; // Update to new filename
+                } else {
+                    $message = "Error: Failed to upload file.";
+                    $message_type = "danger";
+                }
+            }
+        }
     }
-}
+
+    // Only update DB if no error
+    if ($message_type !== "danger") {
+        $update_query = "UPDATE cars SET 
+                         make='$make', 
+                         model='$model', 
+                         year='$year', 
+                         color='$color', 
+                         quantity='$quantity', 
+                         price='$price',
+                         image='$image_filename' 
+                         WHERE product_id = $product_id";
+
+        if (mysqli_query($link, $update_query)) {
+            echo "<script>alert('Car details updated successfully!'); window.location='car.php';</script>";
+            exit(); 
+        } else {
+            $message = "Update failed: " . mysqli_error($link);
+            $message_type = "danger";
+        }
+    }
+} // <--- THIS WAS THE MISSING BRACE
 
 // Fetch Data
 $query = "SELECT * FROM cars WHERE product_id = $product_id";
@@ -69,12 +114,13 @@ $row = mysqli_fetch_assoc($res);
         .navbar-brand { color: #4e73df !important; font-weight: 800; }
         .card-custom { border: none; border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15); margin-top: 50px; }
         .card-header-custom { background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); color: white; padding: 20px; font-weight: 700; text-align: center; border-radius: 15px 15px 0 0; }
-        .form-control { border-radius: 5px; height: 45px; }
+        .form-control, .custom-file-label { border-radius: 5px; height: 45px; display: flex; align-items: center; }
         .input-group-text { background-color: #f8f9fc; color: #4e73df; border: 1px solid #ced4da; }
         .btn-update { background-color: #4e73df; color: white; border-radius: 50px; padding: 10px 30px; font-weight: bold; width: 100%; border: none; }
         .btn-update:hover { background-color: #2e59d9; color: white; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(78, 115, 223, 0.4); }
         .btn-back { border-radius: 50px; width: 100%; border: 2px solid #858796; color: #858796; font-weight: bold; padding: 10px 30px; text-align: center; display: block; }
         .btn-back:hover { background-color: #858796; color: white; text-decoration: none; }
+        .current-img-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; border: 2px solid #eaecf4; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -99,7 +145,24 @@ $row = mysqli_fetch_assoc($res);
             <div class="card card-custom">
                 <div class="card-header card-header-custom"><i class="fas fa-edit mr-2"></i> EDIT CAR INFORMATION</div>
                 <div class="card-body p-4 p-md-5">
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
+                        
+                        <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($row['image']); ?>">
+
+                        <div class="row mb-4">
+                            <div class="col-md-12 text-center">
+                                <label class="font-weight-bold d-block text-left">Current Image</label>
+                                <?php 
+                                    $img_path = "uploads/" . $row['image'];
+                                    // Check if image is empty OR file doesn't exist
+                                    if(empty($row['image']) || !file_exists($img_path)) {
+                                        $img_path = "https://via.placeholder.com/600x300.png?text=No+Image";
+                                    }
+                                ?>
+                                <img src="<?php echo $img_path; ?>" class="current-img-preview" alt="Current Car Image">
+                            </div>
+                        </div>
+
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Make</label>
@@ -134,7 +197,7 @@ $row = mysqli_fetch_assoc($res);
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label>Quantity (Stock)</label>
+                                <label>Quantity</label>
                                 <div class="input-group">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-cubes"></i></span></div>
                                     <input type="number" class="form-control" name="quantity" value="<?php echo htmlspecialchars($row['quantity']); ?>" required>
@@ -148,6 +211,16 @@ $row = mysqli_fetch_assoc($res);
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="font-weight-bold text-primary">Update Image (Optional)</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="car_image" id="carImg">
+                                <label class="custom-file-label" for="carImg">Choose new file...</label>
+                            </div>
+                            <small class="text-muted">Leave blank if you want to keep the current image.</small>
+                        </div>
+
                         <hr class="my-4">
                         <div class="row">
                             <div class="col-6"><a href="car.php" class="btn btn-back">Cancel</a></div>
@@ -162,5 +235,12 @@ $row = mysqli_fetch_assoc($res);
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    // Show selected filename
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
 </body>
 </html>

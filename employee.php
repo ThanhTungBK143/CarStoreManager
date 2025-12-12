@@ -1,12 +1,6 @@
 <?php
 include "connection.php";
-session_start();
-
-// 1. CHECK LOGIN
-if (!isset($_SESSION['username'])) {
-    header('location:login.php');
-    exit();
-}
+include "auth_check.php";
 
 // 2. CHECK ADMIN PERMISSION
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';

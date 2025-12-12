@@ -1,13 +1,6 @@
 <?php
 include "connection.php";
-session_start();
-
-// 1. KIỂM TRA ĐĂNG NHẬP
-if (!isset($_SESSION['username'])) {
-    header('location:login.php');
-    exit();
-}
-
+include "auth_check.php";
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'sale';
 
 // 2. XỬ LÝ XÓA XE (Chỉ Admin mới được xóa)

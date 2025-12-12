@@ -1,12 +1,6 @@
 <?php
 include "connection.php";
-session_start();
-
-// 1. KIỂM TRA ĐĂNG NHẬP
-if (!isset($_SESSION['username'])) {
-    header('location:login.php');
-    exit();
-}
+include "auth_check.php";
 
 $message = '';
 $message_type = '';

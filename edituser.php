@@ -1,12 +1,6 @@
 <?php
 include "connection.php";
-session_start();
-
-// 1. CHECK ACCESS PERMISSION (Admin Only)
-if (!isset($_SESSION['username'])) {
-    header('location:login.php');
-    exit();
-}
+include "auth_check.php";
 
 $current_user_role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
 if ($current_user_role !== 'admin') {

@@ -1,14 +1,8 @@
 <?php
 include "connection.php";
-session_start();
+include "auth_check.php"; // Đã bao gồm session_start
 
-// 1. CHECK LOGIN
-if(!isset($_SESSION['username'])){
-    header('location:login.php');
-    exit();
-}
-
-// 2. CHECK PERMISSION (ONLY ADMIN CAN ACCESS)
+// 2. CHECK PERMISSION
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'sale';
 if ($role !== 'admin') {
     echo "<script>alert('Access Denied! Only Administrators can add new cars.'); window.location='car.php';</script>";
@@ -25,23 +19,54 @@ if(isset($_POST["insert"])) {
     $color = mysqli_real_escape_string($link, $_POST['color']);
     $quantity = (int)$_POST['quantity'];
     $price = (float)$_POST['price'];
-
-    // Check if car exists
-    $check_query = "SELECT * FROM cars WHERE make='$make' AND model='$model' AND year='$year' AND color='$color'";
-    $res = mysqli_query($link, $check_query);
     
-    if(mysqli_num_rows($res) > 0) {
-        // Update quantity if exists
-        $row = mysqli_fetch_array($res);
-        $new_quantity = $row["quantity"] + $quantity;
-        mysqli_query($link, "UPDATE cars SET quantity='$new_quantity', price='$price' WHERE product_id=" . $row['product_id']);
-        $message = "Car quantity updated successfully!";
-        $message_type = "success";
-    } else {
-        // Insert new car
-        mysqli_query($link, "INSERT INTO cars (make, model, year, color, quantity, price) VALUES ('$make','$model','$year','$color','$quantity','$price')");
-        $message = "New car added successfully!";
-        $message_type = "success";
+    // --- XỬ LÝ UPLOAD ẢNH ---
+    $image_filename = "default.jpg"; // Mặc định
+    
+    // Kiểm tra và tạo thư mục uploads nếu chưa có
+    if (!file_exists('uploads')) {
+        mkdir('uploads', 0777, true);
+    }
+
+    if (isset($_FILES['car_image']) && $_FILES['car_image']['error'] == 0) {
+        $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "png" => "image/png");
+        $filename = $_FILES["car_image"]["name"];
+        $filesize = $_FILES["car_image"]["size"];
+        
+        // [FIX LỖI 1] Chuyển đuôi file về chữ thường để kiểm tra
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        if(!array_key_exists($ext, $allowed)) {
+            $message = "Lỗi: Chỉ chấp nhận file JPG hoặc PNG.";
+            $message_type = "danger";
+        } elseif($filesize > 5 * 1024 * 1024) {
+            $message = "Lỗi: Dung lượng file quá lớn (>5MB).";
+            $message_type = "danger";
+        } else {
+            // Đặt tên file mới (Time + Random)
+            $new_filename = time() . "_" . rand(1000, 9999) . "." . $ext;
+            
+            if(move_uploaded_file($_FILES["car_image"]["tmp_name"], "uploads/" . $new_filename)){
+                $image_filename = $new_filename;
+            } else {
+                $message = "Lỗi: Không thể lưu file vào thư mục uploads (Kiểm tra quyền ghi).";
+                $message_type = "danger";
+            }
+        }
+    }
+
+    // [FIX LỖI 2] Chỉ Insert vào DB nếu KHÔNG có lỗi upload ảnh
+    if ($message_type !== "danger") {
+        $sql = "INSERT INTO cars (make, model, year, color, quantity, price, image) 
+                VALUES ('$make','$model','$year','$color','$quantity','$price', '$image_filename')";
+                
+        if(mysqli_query($link, $sql)) {
+            $message = "New car added successfully with image!";
+            $message_type = "success";
+        } else {
+            $message = "Database Error: " . mysqli_error($link);
+            $message_type = "danger";
+        }
     }
 }
 ?>
@@ -51,7 +76,7 @@ if(isset($_POST["insert"])) {
 <head>
     <title>Add New Car</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap" rel="stylesheet">
@@ -62,7 +87,7 @@ if(isset($_POST["insert"])) {
         .navbar-brand { color: #4e73df !important; font-weight: 800; }
         .card-custom { border: none; border-radius: 15px; box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); overflow: hidden; }
         .card-header-custom { background: linear-gradient(135deg, #4e73df 0%, #224abe 100%); color: white; padding: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-align: center; }
-        .form-control { border-radius: 5px; height: 45px; font-size: 0.95rem; }
+        .form-control, .custom-file-label { border-radius: 5px; height: 45px; font-size: 0.95rem; display: flex; align-items: center;}
         .input-group-text { background-color: #f8f9fc; border-right: none; color: #4e73df; }
         .btn-submit { background-color: #4e73df; border-color: #4e73df; color: white; font-weight: 700; padding: 12px; border-radius: 50px; transition: all 0.3s; }
         .btn-submit:hover { background-color: #2e59d9; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(78, 115, 223, 0.4); color: white; }
@@ -91,7 +116,7 @@ if(isset($_POST["insert"])) {
             <div class="card card-custom">
                 <div class="card-header card-header-custom"><i class="fas fa-car mr-2"></i> Add New Vehicle</div>
                 <div class="card-body p-4 p-md-5">
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label>Car Make</label>
@@ -140,6 +165,16 @@ if(isset($_POST["insert"])) {
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label>Car Image <span class="text-danger">*</span></label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="car_image" id="carImg" required>
+                                <label class="custom-file-label" for="carImg">Choose file...</label>
+                            </div>
+                            <small class="text-muted">Supported formats: JPG, PNG. Max size: 5MB.</small>
+                        </div>
+
                         <hr class="my-4">
                         <button type="submit" name="insert" class="btn btn-submit btn-block"><i class="fas fa-plus-circle mr-2"></i> ADD TO INVENTORY</button>
                     </form>
@@ -151,5 +186,12 @@ if(isset($_POST["insert"])) {
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    // Hiển thị tên file đã chọn
+    $(".custom-file-input").on("change", function() {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+</script>
 </body>
 </html>

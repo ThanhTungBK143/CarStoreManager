@@ -6,7 +6,7 @@ $error_message = '';
 
 // Nếu đã đăng nhập thì chuyển hướng vào trong
 if (isset($_SESSION['username'])) {
-    header('location:homepage.php');
+    header('location:index.php');
     exit();
 }
 
@@ -37,6 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $row['username'];
                 $_SESSION['role'] = $row['role']; 
                 $_SESSION['user_id_from_db'] = $row['id']; 
+<<<<<<< HEAD
 
                 if ($remember) {
                     $token = bin2hex(random_bytes(32));
@@ -53,6 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
 
                 header('location: homepage.php');
+=======
+                header('location: index.php');
+>>>>>>> 2f950b2472c9ec3301f744f4c6ba2e60762a49c8
                 exit();
             } else {
                 $error_message = "Sai tên đăng nhập hoặc mật khẩu.";

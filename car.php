@@ -114,7 +114,7 @@ if ($role === 'admin' && isset($_GET['delete_id'])) {
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php">
+        <a class="navbar-brand" href="index.php">
             <i class="fas fa-arrow-left"></i> BACK TO DASHBOARD
         </a>
         <span class="navbar-text ml-auto">

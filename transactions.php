@@ -2,9 +2,25 @@
 include "connection.php";
 include "auth_check.php";
 
+<<<<<<< HEAD
 // Lấy thông tin Role và User ID
 $role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : 'sale';
 $current_user_id = isset($_SESSION['user_id_from_db']) ? intval($_SESSION['user_id_from_db']) : 0;
+=======
+// 1. KIỂM TRA ĐĂNG NHẬP
+if (!isset($_SESSION['username'])) {
+    header('location:login.php');
+    exit();
+}
+
+// 2. KIỂM TRA QUYỀN ADMIN (CHẶN SALE)
+// Chỉ Admin mới được xem doanh thu/giao dịch
+$role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
+if ($role !== 'admin') {
+    echo "<script>alert('Truy cập bị từ chối! Chỉ Admin mới được xem lịch sử giao dịch.'); window.location='index.php';</script>";
+    exit();
+}
+>>>>>>> 2f950b2472c9ec3301f744f4c6ba2e60762a49c8
 
 // [ĐÃ XÓA] Đoạn code chặn quyền truy cập của Sale
 // Bây giờ cả Admin và Sale đều vào được trang này.
@@ -42,7 +58,7 @@ $current_user_id = isset($_SESSION['user_id_from_db']) ? intval($_SESSION['user_
 
 <nav class="navbar navbar-expand navbar-light navbar-custom fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="homepage.php">
+        <a class="navbar-brand" href="index.php">
             <i class="fas fa-arrow-left mr-2"></i> BACK TO DASHBOARD
         </a>
         <span class="navbar-text ml-auto">

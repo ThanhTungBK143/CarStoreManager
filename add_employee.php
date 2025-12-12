@@ -6,7 +6,7 @@ include "auth_check.php";
 $current_user_role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
 
 if ($current_user_role !== 'admin') {
-    echo "<script>alert('Access Denied! Only Administrators can add employees.'); window.location='homepage.php';</script>";
+    echo "<script>alert('Access Denied! Only Administrators can add employees.'); window.location='index.php';</script>";
     exit();
 }
 

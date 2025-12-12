@@ -4,7 +4,7 @@ include "auth_check.php";
 
 $current_user_role = isset($_SESSION['role']) ? strtolower($_SESSION['role']) : '';
 if ($current_user_role !== 'admin') {
-    echo "<script>alert('Access Denied! You are not an Admin.'); window.location='homepage.php';</script>";
+    echo "<script>alert('Access Denied! You are not an Admin.'); window.location='index.php';</script>";
     exit();
 }
 
